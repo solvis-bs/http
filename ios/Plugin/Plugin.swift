@@ -293,6 +293,12 @@ public class CAPHttpPlugin: CAPPlugin {
         return
       }
     }
+    else {
+      let dataString = call.getString("data")
+      if dataString != nil {
+        request.httpBody = Data(dataString!.utf8)
+      }
+    }
 
     let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
       if error != nil {
