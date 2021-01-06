@@ -89,6 +89,7 @@ public class Http extends Plugin {
             Integer connectTimeout = call.getInt("connectTimeout");
             Integer readTimeout = call.getInt("readTimeout");
             JSObject data = call.getObject("data");
+            String dataString = call.getString("data");
 
             URL url = new URL(urlString);
 
@@ -96,7 +97,12 @@ public class Http extends Plugin {
 
             conn.setDoOutput(true);
 
-            setRequestBody(conn, data, headers);
+            if(dataString != null){
+              setRequestBodyFromDataString(conn, dataString);
+            }
+            else {
+              setRequestBody(conn, data, headers);
+            }
 
             conn.connect();
 
@@ -506,6 +512,13 @@ public class Http extends Plugin {
                 uploader.finish();
             }
         }
+    }
+
+    private void setRequestBodyFromDataString(HttpURLConnection conn, String dataString) throws IOException, JSONException {
+      DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+      os.writeBytes(dataString);
+      os.flush();
+      os.close();
     }
 
     private URI getUri(String url) {
