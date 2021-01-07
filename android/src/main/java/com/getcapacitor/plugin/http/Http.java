@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -23,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -97,11 +99,10 @@ public class Http extends Plugin {
 
             conn.setDoOutput(true);
 
-            if(dataString != null){
-              setRequestBodyFromDataString(conn, dataString);
-            }
-            else {
-              setRequestBody(conn, data, headers);
+            if (dataString != null) {
+                setRequestBodyFromDataString(conn, dataString);
+            } else {
+                setRequestBody(conn, data, headers);
             }
 
             conn.connect();
@@ -515,10 +516,10 @@ public class Http extends Plugin {
     }
 
     private void setRequestBodyFromDataString(HttpURLConnection conn, String dataString) throws IOException, JSONException {
-      DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-      os.writeBytes(dataString);
-      os.flush();
-      os.close();
+        DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+        os.writeBytes(dataString);
+        os.flush();
+        os.close();
     }
 
     private URI getUri(String url) {
